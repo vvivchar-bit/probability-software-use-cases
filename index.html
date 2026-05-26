@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Практичні приклади застосування теорії ймовірностей</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #eef2f7;
+      color: #1f2937;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .header {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+      color: #0f172a;
+    }
+
+    .header p {
+      margin: 0;
+      color: #475569;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      border: none;
+      background: #dbeafe;
+      color: #1e3a8a;
+      padding: 12px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.2s;
+    }
+
+    .tab-btn:hover {
+      background: #bfdbfe;
+    }
+
+    .tab-btn.active {
+      background: #1d4ed8;
+      color: white;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      padding: 24px;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 18px;
+    }
+
+    .badge {
+      background: #ecfeff;
+      color: #0f766e;
+      border: 1px solid #99f6e4;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .section-title {
+      margin-top: 0;
+      margin-bottom: 12px;
+      color: #0f172a;
+      font-size: 28px;
+    }
+
+    .lead {
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: flex-end;
+      margin-bottom: 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .field input,
+    .field textarea {
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 15px;
+      min-width: 140px;
+      background: #fff;
+    }
+
+    .field textarea {
+      min-width: 420px;
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .btn {
+      border: none;
+      background: #1d4ed8;
+      color: white;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #1e40af;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 16px;
+    }
+
+    .panel {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .panel h3 {
+      margin-top: 0;
+      color: #0f172a;
+    }
+
+    .formula {
+      font-family: "Times New Roman", serif;
+      font-size: 20px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: inline-block;
+      margin: 8px 0;
+    }
+
+    .result {
+      margin-top: 12px;
+      background: #dcfce7;
+      border: 1px solid #86efac;
+      color: #166534;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .warning {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+    }
+
+    .example-boxes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin: 16px 0;
+    }
+
+    .mini-box {
+      min-width: 140px;
+      padding: 14px;
+      text-align: center;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      font-weight: 700;
+    }
+
+    .blue-box {
+      background: #dbeafe;
+      border-color: #60a5fa;
+      color: #1e3a8a;
+    }
+
+    .green-box {
+      background: #dcfce7;
+      border-color: #4ade80;
+      color: #166534;
+    }
+
+    .yellow-box {
+      background: #fef3c7;
+      border-color: #facc15;
+      color: #92400e;
+    }
+
+    .red-box {
+      background: #fee2e2;
+      border-color: #f87171;
+      color: #991b1b;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+
+    .table th,
+    .table td {
+      border: 1px solid #cbd5e1;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .table th {
+      background: #e2e8f0;
+    }
+
+    .svg-wrap {
+      margin: 18px 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    svg.chart {
+      width: 100%;
+      max-width: 760px;
+      height: auto;
+      background: #ffffff;
+      border: 1px solid #dbe2ea;
+      border-radius: 12px;
+    }
+
+    .foot-note {
+      margin-top: 10px;
+      color: #475569;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 980px) {
+      .tabs {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .field textarea {
+        min-width: 100%;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .container {
+        padding: 14px;
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+
+      .section-title {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Практичні приклади застосування теорії ймовірностей</h1>
+      <p>
+        Візуалізація використання формул із теми теорії ймовірностей
+        в інженерії програмного забезпечення.
+      </p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="qa">Комбінаторика</button>
+      <button class="tab-btn" data-tab="sla">SLA</button>
+      <button class="tab-btn" data-tab="load">Балансування</button>
+      <button class="tab-btn" data-tab="bayes">Байєс</button>
+      <button class="tab-btn" data-tab="poisson">Пуассон</button>
+      <button class="tab-btn" data-tab="ab">A/B тест</button>
+      <button class="tab-btn" data-tab="cdf">CDF</button>
+    </div>
+
+    <div id="content" class="card"></div>
+  </div>
+
+  <script>
+    const content = document.getElementById("content");
+    const tabButtons = document.querySelectorAll(".tab-btn");
+
+    function factorial(n) {
+      let result = 1;
+      for (let i = 2; i <= n; i++) result *= i;
+      return result;
+    }
+
+    function combinations(n, k) {
+      n = Number(n);
+      k = Number(k);
+      if (k < 0 || k > n) return 0;
+      return factorial(n) / (factorial(k) * factorial(n - k));
+    }
+
+    function poisson(lambda, k) {
+      return (Math.pow(lambda, k) * Math.exp(-lambda)) / factorial(k);
+    }
+
+    function fmt(value, digits = 4) {
+      return Number(value).toFixed(digits);
+    }
+
+    function setActiveTab(tab) {
+      tabButtons.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === tab);
+      });
+    }
+
+    function render(tab) {
+      setActiveTab(tab);
+
+      if (tab === "qa") renderQA();
+      if (tab === "sla") renderSLA();
+      if (tab === "load") renderLoad();
+      if (tab === "bayes") renderBayes();
+      if (tab === "poisson") renderPoisson();
+      if (tab === "ab") renderAB();
+      if (tab === "cdf") renderCDF();
+    }
+
+    function renderQA(n = 10, k = 3) {
+      const count = combinations(n, k);
+
+      content.innerHTML = `
+        <h2 class="section-title">Комбінаторика в тестуванні</h2>
+
+        <div class="badges">
+          <span class="badge">Завдання 1</span>
+          <span class="badge">Завдання 5</span>
+          <span class="badge">Завдання 7</span>
+          <span class="badge">Сполучення</span>
+        </div>
+
+        <p class="lead">
+          Приклад: потрібно вибрати кілька модулів системи для спільного тестування.
+          Кількість таких наборів можна знайти через формулу сполучень.
+        </p>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Кількість модулів n</label>
+            <input id="qa-n" type="number" value="${n}" min="1">
+          </div>
+          <div class="field">
+            <label>Скільки обираємо k</label>
+            <input id="qa-k" type="number" value="${k}" min="1">
+          </div>
+          <button class="btn" id="qa-btn">Перерахувати</button>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Формула</h3>
+            <div class="formula">C(n, k) = n! / (k!(n-k)!)</div>
+            <div class="formula">C(${n}, ${k}) = ${count}</div>
+            <div class="result">Кількість можливих наборів: ${count}</div>
+          </div>
+
+          <div class="panel">
+            <h3>Приклад тестових наборів</h3>
+            <table class="table">
+              <tr>
+                <th>№</th>
+                <th>Модуль 1</th>
+                <th>Модуль 2</th>
+                <th>Модуль 3</th>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>Авторизація</td>
+                <td>Бронювання</td>
+                <td>Оплата</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Авторизація</td>
+                <td>Профіль</td>
+                <td>Звіти</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Бронювання</td>
+                <td>Кімнати</td>
+                <td>Сповіщення</td>
+              </tr>
+              <tr>
+                <td>...</td>
+                <td colspan="3">Усього ${count} варіантів</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("qa-btn").onclick = () => {
+        const newN = Number(document.getElementById("qa-n").value);
+        const newK = Number(document.getElementById("qa-k").value);
+        renderQA(newN, newK);
+      };
+    }
+
+    function renderSLA(p1 = 0.99, p2 = 0.95) {
+      const serial = p1 * p2;
+      const parallel = 1 - (1 - p1) * (1 - p2);
+
+      content.innerHTML = `
+        <h2 class="section-title">SLA та надійність системи</h2>
+
+        <div class="badges">
+          <span class="badge">Завдання 2</span>
+          <span class="badge">Завдання 8</span>
+          <span class="badge">Перетин подій</span>
+          <span class="badge">Об’єднання подій</span>
+        </div>
+
+        <p class="lead">
+          Послідовне з'єднання серверів відповідає одночасному настанню двох подій,
+          а резервування — об’єднанню подій.
+        </p>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Ймовірність роботи сервера A</label>
+            <input id="sla-a" type="number" step="0.01" value="${p1}">
+          </div>
+          <div class="field">
+            <label>Ймовірність роботи сервера B</label>
+            <input id="sla-b" type="number" step="0.01" value="${p2}">
+          </div>
+          <button class="btn" id="sla-btn">Перерахувати</button>
+        </div>
+
+        <div class="example-boxes">
+          <div class="mini-box blue-box">Сервер A<br>${p1}</div>
+          <div class="mini-box blue-box">Сервер B<br>${p2}</div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Послідовна система</h3>
+            <div class="formula">P(A ∩ B) = P(A) · P(B)</div>
+            <div class="formula">${p1} · ${p2} = ${fmt(serial)}</div>
+            <div class="result">Ймовірність роботи: ${fmt(serial)}</div>
+          </div>
+
+          <div class="panel">
+            <h3>Резервування</h3>
+            <div class="formula">P(A ∪ B) = 1 - (1-P(A))(1-P(B))</div>
+            <div class="formula">1 - (1-${p1})(1-${p2}) = ${fmt(parallel)}</div>
+            <div class="result">Ймовірність роботи: ${fmt(parallel)}</div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("sla-btn").onclick = () => {
+        renderSLA(
+          Number(document.getElementById("sla-a").value),
+          Number(document.getElementById("sla-b").value)
+        );
+      };
+    }
+
+    function renderLoad(total = 4, canary = 1) {
+      const p = canary / total;
+
+      content.innerHTML = `
+        <h2 class="section-title">Балансування навантаження</h2>
+
+        <div class="badges">
+          <span class="badge">Завдання 3</span>
+          <span class="badge">Завдання 4</span>
+          <span class="badge">Класична ймовірність</span>
+        </div>
+
+        <p class="lead">
+          Якщо частина серверів використовується для canary-релізу,
+          можна оцінити ймовірність того, що користувач потрапить саме на тестову версію.
+        </p>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Усього серверів</label>
+            <input id="load-total" type="number" value="${total}" min="1">
+          </div>
+          <div class="field">
+            <label>Canary-серверів</label>
+            <input id="load-canary" type="number" value="${canary}" min="0">
+          </div>
+          <button class="btn" id="load-btn">Перерахувати</button>
+        </div>
+
+        <div class="example-boxes">
+          <div class="mini-box green-box">Основний сервер</div>
+          <div class="mini-box green-box">Основний сервер</div>
+          <div class="mini-box yellow-box">Canary</div>
+        </div>
+
+        <div class="panel">
+          <h3>Розрахунок</h3>
+          <div class="formula">P = m / n</div>
+          <div class="formula">P = ${canary} / ${total} = ${fmt(p)}</div>
+          <div class="result">Ймовірність потрапити на canary-реліз: ${fmt(p)}</div>
+        </div>
+      `;
+
+      document.getElementById("load-btn").onclick = () => {
+        renderLoad(
+          Number(document.getElementById("load-total").value),
+          Number(document.getElementById("load-canary").value)
+        );
+      };
+    }
+
+    function renderBayes(a = 0.10, b = 0.70, c = 0.20, da = 0.09, db = 0.08, dc = 0.07) {
+      const defect = a * da + b * db + c * dc;
+      const posterior = (b * db) / defect;
+
+      content.innerHTML = `
+        <h2 class="section-title">Формула Байєса в керуванні інцидентами</h2>
+
+        <div class="badges">
+          <span class="badge">Завдання 10</span>
+          <span class="badge">Завдання 11</span>
+          <span class="badge">Формула Байєса</span>
+        </div>
+
+        <p class="lead">
+          У мікросервісній системі можна оцінити, який саме модуль є найімовірнішою
+          причиною збою, якщо відомо, що помилка вже виникла.
+        </p>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Частка фронтенду</label>
+            <input id="bayes-a" type="number" step="0.01" value="${a}">
+          </div>
+          <div class="field">
+            <label>Частка бекенду</label>
+            <input id="bayes-b" type="number" step="0.01" value="${b}">
+          </div>
+          <div class="field">
+            <label>Частка мобільного</label>
+            <input id="bayes-c" type="number" step="0.01" value="${c}">
+          </div>
+          <div class="field">
+            <label>Дефекти фронтенду</label>
+            <input id="bayes-da" type="number" step="0.01" value="${da}">
+          </div>
+          <div class="field">
+            <label>Дефекти бекенду</label>
+            <input id="bayes-db" type="number" step="0.01" value="${db}">
+          </div>
+          <div class="field">
+            <label>Дефекти мобільного</label>
+            <input id="bayes-dc" type="number" step="0.01" value="${dc}">
+          </div>
+          <button class="btn" id="bayes-btn">Перерахувати</button>
+        </div>
+
+        <div class="example-boxes">
+          <div class="mini-box green-box">Фронтенд</div>
+          <div class="mini-box red-box">Бекенд</div>
+          <div class="mini-box yellow-box">Мобільний</div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Загальна ймовірність дефекту</h3>
+            <div class="formula">P(D) = Σ P(Hᵢ)P(D|Hᵢ)</div>
+            <div class="formula">${fmt(defect)}</div>
+          </div>
+
+          <div class="panel">
+            <h3>Ймовірність, що причина у бекенді</h3>
+            <div class="formula">P(B|D) = P(B)P(D|B) / P(D)</div>
+            <div class="formula">(${b}·${db}) / ${fmt(defect)} = ${fmt(posterior)}</div>
+            <div class="result">Ймовірність причини в бекенді: ${fmt(posterior)}</div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("bayes-btn").onclick = () => {
+        renderBayes(
+          Number(document.getElementById("bayes-a").value),
+          Number(document.getElementById("bayes-b").value),
+          Number(document.getElementById("bayes-c").value),
+          Number(document.getElementById("bayes-da").value),
+          Number(document.getElementById("bayes-db").value),
+          Number(document.getElementById("bayes-dc").value)
+        );
+      };
+    }
+
+    function poissonSVG(lambda, threshold) {
+      let bars = "";
+      for (let k = 0; k <= 8; k++) {
+        const p = poisson(lambda, k);
+        const height = Math.min(p * 700, 190);
+        const x = 70 + k * 70;
+        const y = 250 - height;
+        const fill = k > threshold ? "#fca5a5" : "#93c5fd";
+        const stroke = k > threshold ? "#dc2626" : "#2563eb";
+
+        bars += `
+          <rect x="${x}" y="${y}" width="36" height="${height}"
+            fill="${fill}" stroke="${stroke}" stroke-width="2"></rect>
+          <text x="${x + 5}" y="270" font-size="13" fill="#1f2937">${k}</text>
+          <text x="${x - 2}" y="${y - 8}" font-size="12" fill="#1f2937">${p.toFixed(2)}</text>
+        `;
+      }
+
+      return `
+        <div class="svg-wrap">
+          <svg class="chart" viewBox="0 0 720 320">
+            <text x="190" y="28" font-size="18" font-weight="700" fill="#0f172a">
+              Пуассон / аномалія мережевого трафіку
+            </text>
+
+            <line x1="50" y1="250" x2="680" y2="250" stroke="#334155" stroke-width="2"></line>
+            <line x1="50" y1="50" x2="50" y2="250" stroke="#334155" stroke-width="2"></line>
+
+            <line x1="50" y1="200" x2="680" y2="200" stroke="#e2e8f0"></line>
+            <line x1="50" y1="150" x2="680" y2="150" stroke="#e2e8f0"></line>
+            <line x1="50" y1="100" x2="680" y2="100" stroke="#e2e8f0"></line>
+
+            ${bars}
+
+            <text x="270" y="295" font-size="15" font-weight="700" fill="#0f172a">
+              кількість запитів за інтервал
+            </text>
+            <text x="12" y="44" font-size="15" font-weight="700" fill="#0f172a">P(k)</text>
+            <text x="430" y="52" font-size="14" font-weight="700" fill="#dc2626">
+              Червона зона: k > ${threshold}
+            </text>
+          </svg>
+        </div>
+      `;
+    }
+
+    function renderPoisson(lambda = 2, threshold = 3) {
+      let sum = 0;
+      for (let k = 0; k <= threshold; k++) {
+        sum += poisson(lambda, k);
+      }
+      const pMore = 1 - sum;
+
+      content.innerHTML = `
+        <h2 class="section-title">Пуассон у мережевому трафіку</h2>
+
+        <div class="badges">
+          <span class="badge">Завдання 15</span>
+          <span class="badge">Розподіл Пуассона</span>
+          <span class="badge">DDoS-моніторинг</span>
+        </div>
+
+        <p class="lead">
+          Модель Пуассона можна використовувати для оцінки кількості рідкісних подій,
+          наприклад аномальних запитів до сервера за короткий інтервал часу.
+        </p>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Параметр λ</label>
+            <input id="poisson-lambda" type="number" step="0.1" value="${lambda}">
+          </div>
+          <div class="field">
+            <label>Поріг небезпеки</label>
+            <input id="poisson-threshold" type="number" value="${threshold}">
+          </div>
+          <button class="btn" id="poisson-btn">Перерахувати</button>
+        </div>
+
+        ${poissonSVG(lambda, threshold)}
+
+        <div class="panel">
+          <h3>Розрахунок</h3>
+          <div class="formula">P(X > ${threshold}) = 1 - ΣP(X=k), k=0..${threshold}</div>
+          <div class="result warning">Ймовірність аномального трафіку: ${fmt(pMore)}</div>
+        </div>
+      `;
+
+      document.getElementById("poisson-btn").onclick = () => {
+        renderPoisson(
+          Number(document.getElementById("poisson-lambda").value),
+          Number(document.getElementById("poisson-threshold").value)
+        );
+      };
+    }
+
+    function abSVG() {
+      return `
+        <div class="svg-wrap">
+          <svg class="chart" viewBox="0 0 720 320">
+            <text x="200" y="28" font-size="18" font-weight="700" fill="#0f172a">
+              A/B тестування: очікуваний діапазон
+            </text>
+
+            <line x1="60" y1="260" x2="670" y2="260" stroke="#334155" stroke-width="2"></line>
+
+            <path d="M 80 260
+                     C 170 260, 220 170, 300 100
+                     C 340 70, 380 60, 420 100
+                     C 500 170, 550 260, 650 260"
+                  fill="none" stroke="#2563eb" stroke-width="4"/>
+
+            <path d="M 210 260
+                     C 250 170, 300 110, 360 90
+                     C 420 110, 470 170, 510 260
+                     L 510 260 L 210 260 Z"
+                  fill="rgba(34,197,94,0.22)"></path>
+
+            <circle cx="520" cy="205" r="7" fill="#ef4444"></circle>
+
+            <text x="245" y="120" font-size="14" fill="#166534" font-weight="700">очікувана зона</text>
+            <text x="528" y="205" font-size="14" fill="#991b1b" font-weight="700">поточний результат</text>
+            <text x="175" y="287" font-size="14" fill="#1f2937">нижня межа</text>
+            <text x="485" y="287" font-size="14" fill="#1f2937">верхня межа</text>
+          </svg>
+        </div>
+      `;
+    }
+
+    function renderAB(n = 400, p = 0.2, k = 100) {
+      const q = 1 - p;
+      const mean = n * p;
+      const sigma = Math.sqrt(n * p * q);
+      const z = (k - mean) / sigma;
+
+      content.innerHTML = `
+        <h2 class="section-title">A/B тестування</h2>
+
+        <div class="badges">
+          <span class="badge">Завдання 13</span>
+          <span class="badge">Завдання 14</span>
+          <span class="badge">Нормальне наближення</span>
+        </div>
+
+        <p class="lead">
+          У продуктовій аналітиці статистичні формули використовують для оцінки того,
+          чи є відхилення в конверсії випадковим, чи значущим.
+        </p>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Кількість користувачів n</label>
+            <input id="ab-n" type="number" value="${n}">
+          </div>
+          <div class="field">
+            <label>Ймовірність p</label>
+            <input id="ab-p" type="number" step="0.01" value="${p}">
+          </div>
+          <div class="field">
+            <label>Фактична кількість успіхів k</label>
+            <input id="ab-k" type="number" value="${k}">
+          </div>
+          <button class="btn" id="ab-btn">Перерахувати</button>
+        </div>
+
+        ${abSVG()}
+
+        <div class="panel">
+          <h3>Розрахунок</h3>
+          <div class="formula">z = (k - np) / √(npq)</div>
+          <div class="formula">z = (${k} - ${n}·${p}) / √(${n}·${p}·${q}) = ${fmt(z)}</div>
+          <div class="result">Z-score = ${fmt(z)}</div>
+        </div>
+      `;
+
+      document.getElementById("ab-btn").onclick = () => {
+        renderAB(
+          Number(document.getElementById("ab-n").value),
+          Number(document.getElementById("ab-p").value),
+          Number(document.getElementById("ab-k").value)
+        );
+      };
+    }
+
+    function cdfSVG(values, limit) {
+      const sorted = [...values].sort((a, b) => a - b);
+      const min = Math.min(...sorted);
+      const max = Math.max(...sorted);
+      const range = max - min || 1;
+
+      function sx(x) {
+        return 70 + ((x - min) / range) * 580;
+      }
+
+      function sy(y) {
+        return 260 - y * 180;
+      }
+
+      let lines = "";
+      let points = "";
+      let prevX = 70;
+      let prevY = 260;
+
+      sorted.forEach((v, i) => {
+        const x = sx(v);
+        const y = sy((i + 1) / sorted.length);
+
+        lines += `
+          <line x1="${prevX}" y1="${prevY}" x2="${x}" y2="${prevY}"
+                stroke="#16a34a" stroke-width="4"></line>
+          <line x1="${x}" y1="${prevY}" x2="${x}" y2="${y}"
+                stroke="#86efac" stroke-width="2" stroke-dasharray="5 5"></line>
+          <line x1="${x}" y1="${y}" x2="${x + 26}" y2="${y}"
+                stroke="#16a34a" stroke-width="4"></line>
+        `;
+
+        points += `<circle cx="${x}" cy="${y}" r="4.5" fill="#16a34a"></circle>`;
+
+        prevX = x + 26;
+        prevY = y;
+      });
+
+      lines += `<line x1="${prevX}" y1="${prevY}" x2="660" y2="${prevY}" stroke="#16a34a" stroke-width="4"></line>`;
+
+      const count = values.filter(v => v < limit).length;
+      const f = count / values.length;
+      let lx = sx(limit);
+      if (lx < 70) lx = 70;
+      if (lx > 660) lx = 660;
+
+      const ly = sy(f);
+
+      return `
+        <div class="svg-wrap">
+          <svg class="chart" viewBox="0 0 720 320">
+            <text x="170" y="28" font-size="18" font-weight="700" fill="#0f172a">
+              CDF продуктивності: час завантаження сторінки
+            </text>
+
+            <line x1="70" y1="260" x2="660" y2="260" stroke="#334155" stroke-width="2"></line>
+            <line x1="70" y1="50" x2="70" y2="260" stroke="#334155" stroke-width="2"></line>
+
+            <line x1="70" y1="${sy(0.25)}" x2="660" y2="${sy(0.25)}" stroke="#e2e8f0"></line>
+            <line x1="70" y1="${sy(0.50)}" x2="660" y2="${sy(0.50)}" stroke="#e2e8f0"></line>
+            <line x1="70" y1="${sy(0.75)}" x2="660" y2="${sy(0.75)}" stroke="#e2e8f0"></line>
+            <line x1="70" y1="${sy(1.00)}" x2="660" y2="${sy(1.00)}" stroke="#e2e8f0"></line>
+
+            <text x="42" y="${sy(0)+4}" font-size="12" fill="#1f2937">0</text>
+            <text x="28" y="${sy(0.25)+4}" font-size="12" fill="#1f2937">0.25</text>
+            <text x="28" y="${sy(0.50)+4}" font-size="12" fill="#1f2937">0.50</text>
+            <text x="28" y="${sy(0.75)+4}" font-size="12" fill="#1f2937">0.75</text>
+            <text x="42" y="${sy(1)+4}" font-size="12" fill="#1f2937">1</text>
+
+            ${lines}
+            ${points}
+
+            <line x1="${lx}" y1="260" x2="${lx}" y2="${ly}" stroke="#ef4444" stroke-width="2" stroke-dasharray="5 5"></line>
+            <circle cx="${lx}" cy="${ly}" r="6" fill="#ef4444"></circle>
+
+            <text x="${Math.min(lx + 10, 540)}" y="${Math.max(ly - 12, 70)}" font-size="14" font-weight="700" fill="#991b1b">
+              F*(${limit}) = ${fmt(f, 2)}
+            </text>
+
+            <text x="250" y="292" font-size="14" font-weight="700" fill="#0f172a">
+              час завантаження, секунди
+            </text>
+            <text x="18" y="44" font-size="14" font-weight="700" fill="#0f172a">F*(x)</text>
+          </svg>
+        </div>
+      `;
+    }
+
+    function renderCDF(text = "1.1,1.3,1.8,2.0,2.1,2.3,2.4,2.5,2.8,3.0,3.1,3.4,3.7,4.0,4.5", limit = 2.5) {
+      const values = text
+        .split(",")
+        .map(v => Number(v.trim()))
+        .filter(v => !isNaN(v));
+
+      const count = values.filter(v => v < limit).length;
+      const f = count / values.length;
+
+      content.innerHTML = `
+        <h2 class="section-title">CDF та аналіз продуктивності</h2>
+
+        <div class="badges">
+          <span class="badge">Завдання 17</span>
+          <span class="badge">Завдання 18</span>
+          <span class="badge">Завдання 19</span>
+          <span class="badge">Завдання 20</span>
+          <span class="badge">Емпірична функція розподілу</span>
+        </div>
+
+        <p class="lead">
+          CDF допомагає оцінити, яка частина користувачів отримує сторінку
+          швидше за заданий час.
+        </p>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Часи завантаження через кому</label>
+            <textarea id="cdf-values">${text}</textarea>
+          </div>
+          <div class="field">
+            <label>Межа x</label>
+            <input id="cdf-limit" type="number" step="0.1" value="${limit}">
+          </div>
+          <button class="btn" id="cdf-btn">Перерахувати</button>
+        </div>
+
+        ${cdfSVG(values, limit)}
+
+        <div class="panel">
+          <h3>Розрахунок</h3>
+          <div class="formula">F*(${limit}) = ${count} / ${values.length}</div>
+          <div class="result">Частка користувачів із часом меншим за ${limit} сек: ${fmt(f)}</div>
+          <p class="foot-note">
+            Тут використано визначення емпіричної функції розподілу:
+            F*(x) — це частка значень вибірки, менших за x.
+          </p>
+        </div>
+      `;
+
+      document.getElementById("cdf-btn").onclick = () => {
+        renderCDF(
+          document.getElementById("cdf-values").value,
+          Number(document.getElementById("cdf-limit").value)
+        );
+      };
+    }
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener("click", () => render(btn.dataset.tab));
+    });
+
+    render("qa");
+  </script>
+</body>
+</html>
